@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+exit();
 typedef struct nodes
 {
   int val;
