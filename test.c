@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct nodes
+typedef struct node
 {
   int val;
-  struct nodes* next;
-} node;
+  struct node *next;
+} Node;
 
 typedef struct tree_node
 {
@@ -14,28 +14,43 @@ typedef struct tree_node
   struct tree_node *right;
 } TreeNode;
 
-int pop(node** head);
-int push(node **head, int val);
-int append(node *head, int val);
-void traverse(node *head);
+int pop(Node** head);
+int push(Node **head, int val);
+int append(Node *head, int val);
+void traverse(Node *head);
 void pre_order(TreeNode *head);
 
 void linked_list();
 void binary_tree();
 
+typedef struct mystruct {
+  int i;
+  float f;
+  char c;
+} MyStruct;
+
+typedef union myunion {
+  int i;
+  float f;
+  char c;
+} MyUnion;
+
+void union_vs_struct();
+
 int main() {
   linked_list();
   binary_tree();
+  union_vs_struct();
 
   return 0;
 }
 
-int pop(node** head) {
+int pop(Node** head) {
   if (*head == NULL) {
     return -1;
   }
 
-  node* temp = (*head)->next;
+  Node* temp = (*head)->next;
   int retval = (*head)->val;
   free(*head);
   *head = temp;
@@ -44,9 +59,9 @@ int pop(node** head) {
   return retval;
 }
 
-int push(node** head, int val) {
-  node* temp;
-  node* new_node = (node *)malloc(sizeof(node));
+int push(Node** head, int val) {
+  Node* temp;
+  Node* new_node = (Node *)malloc(sizeof(Node));
 
   new_node->val = val;
   new_node->next = *head;
@@ -57,7 +72,7 @@ int push(node** head, int val) {
   return val;
 }
 
-int append(node *head, int val) {
+int append(Node *head, int val) {
   if (head == NULL) {
     return -1;
   }
@@ -66,7 +81,7 @@ int append(node *head, int val) {
     head = head->next;
   }
 
-  node *new_node = (node *)malloc(sizeof(node));
+  Node *new_node = (Node *)malloc(sizeof(Node));
   new_node->val = val;
 
   head->next = new_node;
@@ -75,7 +90,7 @@ int append(node *head, int val) {
   return val;
 }
 
-void traverse(node *head) {
+void traverse(Node *head) {
   while (head != NULL) {
     if (head->next == NULL) {
       printf("%d\n", head->val);
@@ -97,14 +112,14 @@ void pre_order(TreeNode *root) {
 }
 
 void linked_list() {
-  node *head = (node *)malloc(sizeof(node));
+  Node *head = (Node *)malloc(sizeof(Node));
   head->val = 1;
 
-  node *new_node = (node *)malloc(sizeof(node));
+  Node *new_node = (Node *)malloc(sizeof(Node));
   head->next = new_node;
   new_node->val = 8;
 
-  node **p_head = (node **)malloc(sizeof(node));
+  Node **p_head = (Node **)malloc(sizeof(Node));
   *p_head = head;
   traverse(*p_head);
 
@@ -139,4 +154,22 @@ void binary_tree() {
   pre_order(root);
 
   printf("\n");
+}
+
+void union_vs_struct() {
+  printf("struct size: %lu\n", sizeof(MyStruct));
+  printf("union size: %lu\n", sizeof(MyUnion));
+
+  MyStruct *my_struct;
+  my_struct->i = 1;
+  my_struct->f = 1.23;
+  my_struct->c = 'J';
+
+  MyUnion *my_union;
+  my_union->i = 1;
+  my_union->f = 1.23;
+  my_union->c = 'J';
+
+  printf("my_struct -- i: %d, f: %f, c: %c\n", my_struct->i, my_struct->f, my_struct->c);
+  printf("my_union -- i: %d, f: %f, c: %c\n", my_union->i, my_union->f, my_union->c);
 }
